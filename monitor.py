@@ -1,3 +1,5 @@
+# https://www.usandopy.com/pt/artigo/monitorar-uso-de-cpu-e-memoria-em-python-com-grafico-ao-vivo/
+
 import psutil
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
