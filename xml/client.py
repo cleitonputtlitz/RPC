@@ -3,56 +3,41 @@ import time
 import psutil
 import os
 
+#with xmlrpc.client.ServerProxy("http://localhost:8000/") as proxy:
+with xmlrpc.client.ServerProxy("http://143.54.49.122:8000/") as proxy:
 
-with xmlrpc.client.ServerProxy("http://localhost:8000/") as proxy:
-#with xmlrpc.client.ServerProxy("http://143.54.49.122:8000/") as proxy:
+    param = []
+    for i in range(100):
+        param.append(2147483647)
    
-    lista = [2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647,
-            2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647,
-            2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647,
-            2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647,
-            2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647,
-            2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647,
-            2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647,
-            2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647,
-            2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647,
-            2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647 ]
     
     start_time = time.perf_counter()
     i = 0
     
-    f = open("log.csv", "w")
-    f.write("latencia; throughput\n")
+    f = open("log.csv", "a")
+    #f.write("latencia; throughput\n")
 
-    for n in range(20):
-        #time_env = datetime.datetime.now()
-        #print("mandou o pedido " + str(time_env))
-        
+    for n in range(100):
+                
         start = time.perf_counter()
         
-        resp = proxy.exec(lista)
+        print("Enviando req ", n)
+        
+        resp = proxy.exec(param)
         
         end = time.perf_counter() - start   #latencia
         
         time_diff = time.perf_counter() - start_time
-        i += 1
-                
-        #time_rec = datetime.datetime.now()
-        #print("recebeu o retorno " + str(time_rec))
-        #tempo = time_rec - time_env        
-        
-                
-        print('{:.6f}s time for te execution '.format(end))
-        print('{:.6f}s throughput for the execution '.format(i / time_diff))
+        i += 1               
+                        
+        #print('{:.6f}s time for te execution '.format(end))
+        #print('{:.6f}s throughput for the execution '.format(i / time_diff))
 
-        #print("CPU: " + str(psutil.cpu_percent(interval=5)))
-        print(psutil.cpu_percent())
-        print(psutil.cpu_count())
+        #print(psutil.cpu_percent())
+        #print(psutil.cpu_count())
 
-        
-        #print(psutil.cpu_stats())
-        
-        print('RAM memory % used:', psutil.virtual_memory()[2]) 
+         
+        #print('RAM memory % used:', psutil.virtual_memory()[2]) 
     
         #tempo ; latencia ; throughput
         f.write(str(i) + "; " + str("{:.6f}".format(end)) + "; " + str("{:.6f}".format(i / time_diff))+";\n")
