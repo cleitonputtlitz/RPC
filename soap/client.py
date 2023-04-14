@@ -1,48 +1,46 @@
+from weakref import proxy
 from suds.client import Client
 import time
-import array as arr
-from suds.sudsobject import Object
 
+param = []
+for i in range(10000):
+    param.append(2147483647)
 
-#lista = np.array([2147483647, 2147483647])
-results = []
-results.append('2147483647')
-results.append('2147483647')
-results.append('2147483647')
-results.append('2147483647')
-results.append('2147483647')
-results.append('2147483647')
+# w sobrescreve; a adiciona no final
+f = open("log.csv", "a")
+#f.write("latencia; throughput\n")
 
 start_time = time.perf_counter()
 i = 0
 
-for n in range(5):
-    
-    start = time.perf_counter()
-        
-    #resp = server.exec(lista)
+proxy = Client('http://143.54.49.122:8000/?wsdl')
 
+for n in range(100):
     
-    hello_client = Client('http://localhost:8000/?wsdl')
+    start = time.perf_counter()   
+
+    print("Enviando req ", n)
 
     #pega o tipo do campo que esta no ?wsdl e seta o valor
-    entry1 = hello_client.factory.create('stringArray')
-    entry1.string = results
-    print(entry1)
+    entry1 = proxy.factory.create('stringArray')
+    entry1.string = param
+    #print(entry1)
 
-    #resp = hello_client.service.say_hello("Dave", 5)
-    resp = hello_client.service.return_hello(entry1)
-    print(type(resp))
-    print(resp)
-
+    #resp = proxy.service.say_hello("Dave", 5)
+    resp = proxy.service.return_hello(entry1)
         
     end = time.perf_counter() - start   #latencia
         
     time_diff = time.perf_counter() - start_time
     i += 1
 
-    print('{:.6f}s time for te execution '.format(end))
-    print('{:.6f}s throughput for the execution '.format(i / time_diff))
+
+    #print('{:.6f}s time for te execution '.format(end))
+    #print('{:.6f}s throughput for the execution '.format(i / time_diff))
+
+    f.write(str(i) + "; " + str("{:.6f}".format(end)) + "; " + str("{:.6f}".format(i / time_diff))+";\n")
+     
+f.close()
 
     
 
